@@ -1,4 +1,5 @@
 import {
+  angle,
   IModel,
   IModelMap,
   IPoint,
@@ -9,6 +10,8 @@ import {
 
 import { IBlock } from '../types/block'
 import { IMeasurements } from '../types/measurements'
+
+import { smoothCurve } from '../helpers/curve'
 
 export interface IBodiceMeasurements extends IMeasurements {
   B: number,
@@ -99,6 +102,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
 export interface IBodiceBack extends IModelMap {
   centerBack: IModel,
   shoulder: IModel,
+  neckline: IModel,
 }
 
 export class BodiceBack implements IModel {
@@ -118,11 +122,25 @@ export class BodiceBack implements IModel {
       SP,
     } = block.points
 
+    const shoulderAngle = angle.ofPointInDegrees(NP, SP)
+
     this.models = {
       centerBack : new models.ConnectTheDots(false, [
         [centerBack, O],
         [centerBack, lineH],
         HP,
+      ]),
+      neckline: smoothCurve([
+        {
+          angleInDegrees: shoulderAngle - 90,
+          distance: NP[1] - O,
+          origin: NP,
+        },
+        {
+          angleInDegrees: 180,
+          distance: (NP[0] - centerBack) / 2,
+          origin: [centerBack, O],
+        },
       ]),
       shoulder: new models.ConnectTheDots(false, [
         NP,
