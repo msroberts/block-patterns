@@ -1,4 +1,4 @@
-import { IModel, IModelMap, models } from 'makerjs'
+import { IModel, IModelMap, IPoint, models } from 'makerjs'
 
 import { IBlock } from '../types/block'
 import { IMeasurements } from '../types/measurements'
@@ -21,6 +21,8 @@ export interface IBodiceMeasurements extends IMeasurements {
 export interface IBodiceBlock extends IBlock {
   x: {
     centerBack: number,
+    neckWidth: number,
+    backWidth: number,
   }
   y: {
     O: number,
@@ -29,6 +31,12 @@ export interface IBodiceBlock extends IBlock {
     lineW: number,
     linexB: number,
     lineH: number,
+  },
+  points: {
+    NP: IPoint,
+    UP: IPoint,
+    SP: IPoint,
+    HP: IPoint,
   },
 }
 
@@ -42,11 +50,26 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
   const linexB = lineS - (lineS - lineB) / 2
   const lineH = lineW - 22
 
+  const neckWidth = measurements.B / 16 + 1.25
+  const NP: IPoint = [neckWidth, O + 2]
+
+  const backWidth = measurements.xB / 2
+  const UP: IPoint = [backWidth + measurements.B / 16, lineB]
+  const SP: IPoint = [backWidth + 2, lineS]
+
+  const HP: IPoint = [measurements.H / 4, lineH]
+
   return {
     points: {
+      HP,
+      NP,
+      SP,
+      UP,
     },
     x: {
+      backWidth,
       centerBack,
+      neckWidth,
     },
     y: {
       O,
@@ -61,6 +84,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
 
 export interface IBodiceBack extends IModelMap {
   centerBack: IModel,
+  shoulder: IModel,
 }
 
 export class BodiceBack implements IModel {
@@ -74,11 +98,21 @@ export class BodiceBack implements IModel {
       O,
       lineH,
     } = block.y
+    const {
+      HP,
+      NP,
+      SP,
+    } = block.points
 
     this.models = {
       centerBack : new models.ConnectTheDots(false, [
         [centerBack, O],
         [centerBack, lineH],
+        HP,
+      ]),
+      shoulder: new models.ConnectTheDots(false, [
+        NP,
+        SP,
       ]),
     }
   }
