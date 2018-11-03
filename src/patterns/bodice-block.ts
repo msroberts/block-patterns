@@ -1,4 +1,11 @@
-import { IModel, IModelMap, IPoint, models } from 'makerjs'
+import {
+  IModel,
+  IModelMap,
+  IPoint,
+  models,
+  paths,
+  point,
+} from 'makerjs'
 
 import { IBlock } from '../types/block'
 import { IMeasurements } from '../types/measurements'
@@ -37,6 +44,7 @@ export interface IBodiceBlock extends IBlock {
     UP: IPoint,
     SP: IPoint,
     HP: IPoint,
+    WP: IPoint,
   },
 }
 
@@ -58,6 +66,11 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
   const SP: IPoint = [backWidth + 2, lineS]
 
   const HP: IPoint = [measurements.H / 4, lineH]
+  const WP = point.fromSlopeIntersection(
+    new paths.Line([UP, HP]),
+    new paths.Line([[0, lineW], [2, lineW]]),
+  )
+  WP[0] -= 2
 
   return {
     points: {
@@ -65,6 +78,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
       NP,
       SP,
       UP,
+      WP,
     },
     x: {
       backWidth,
