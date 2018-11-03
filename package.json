@@ -2,9 +2,11 @@
   "name": "block-patterns",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "tslint --project ./ src/**/*.ts",
+    "lint:fix": "tslint --fix --project ./ src/**/*.ts",
+    "start": "node ./dist",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,5 +25,8 @@
     "tslint": "^5.10.0",
     "tslint-config-standard": "^7.1.0",
     "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "makerjs": "^0.9.93"
   }
 }
