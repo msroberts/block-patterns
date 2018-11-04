@@ -1,6 +1,8 @@
 import { writeFile } from 'fs'
 import { exporter, model } from 'makerjs'
-import { BodiceBack, bodiceBlock, BodiceFront, IBodiceMeasurements } from './patterns/bodice-block'
+import { BodiceBack } from './patterns/bodice-block/back'
+import { bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block/block'
+import { BodiceFront } from './patterns/bodice-block/front'
 
 const measurements: IBodiceMeasurements = {
   B: 92,
