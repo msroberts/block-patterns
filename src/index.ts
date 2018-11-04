@@ -1,6 +1,6 @@
 import { writeFile } from 'fs'
 import { exporter, model } from 'makerjs'
-import { BodiceBack, bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block'
+import { BodiceBack, bodiceBlock, BodiceFront, IBodiceMeasurements } from './patterns/bodice-block'
 
 const measurements: IBodiceMeasurements = {
   B: 92,
@@ -22,6 +22,7 @@ const block = bodiceBlock(measurements)
 
 const svg = exporter.toSVG({models: {
   back: model.layer(new BodiceBack(block), 'block'),
+  front: model.layer(new BodiceFront(block), 'front'),
 }})
 
 writeFile('output.svg', svg, console.log)
