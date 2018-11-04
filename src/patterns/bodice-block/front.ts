@@ -4,7 +4,9 @@ import { IBodiceBlock } from './block'
 
 export interface IBodiceFront extends IModelMap {
   centerFront: IModel,
+  neckline: IModel,
   shoulder: IModel,
+  armhole: IModel,
   underarm: IModel,
   shoulderDart: IModel,
 }
@@ -26,6 +28,7 @@ export class BodiceFront implements IModel {
       SPf,
       ChP,
       UPf,
+      WPf,
     } = block.points
     const {
       base,
@@ -38,24 +41,7 @@ export class BodiceFront implements IModel {
     } = block.angles
 
     this.models = {
-      centerFront: new models.ConnectTheDots(false, [
-        [centerFront, neckline],
-        [centerFront, HPf[1]],
-        HPf,
-      ]),
-      shoulder: new models.ConnectTheDots(false, [
-        NPf,
-        point0,
-        bisector,
-        point1,
-        SPf,
-      ]),
-      shoulderDart: new models.ConnectTheDots(false, [
-        point0,
-        base,
-        point1,
-      ]),
-      underarm: smoothCurve([
+      armhole: smoothCurve([
         {
           angleInDegrees: Math.max(
             angle.ofPointInDegrees(point1, SPf) + 90,
@@ -73,6 +59,52 @@ export class BodiceFront implements IModel {
           angleInDegrees: underarmAngle - 90,
           distance: (ChP[0] - UPf[0]) / 2,
           origin: UPf,
+        },
+      ]),
+      centerFront: new models.ConnectTheDots(false, [
+        [centerFront, neckline],
+        [centerFront, HPf[1]],
+        HPf,
+      ]),
+      neckline: smoothCurve([
+        {
+          angleInDegrees: angle.ofPointInDegrees(NPf, point0) + 90,
+          distance: (NPf[1] - neckline) / 3,
+          origin: NPf,
+        },
+        {
+          angleInDegrees: 0,
+          distance: (centerFront - NPf[0]) * 2 / 3,
+          origin: [centerFront, neckline],
+        },
+      ]),
+      shoulder: new models.ConnectTheDots(false, [
+        NPf,
+        point0,
+        bisector,
+        point1,
+        SPf,
+      ]),
+      shoulderDart: new models.ConnectTheDots(false, [
+        point0,
+        base,
+        point1,
+      ]),
+      underarm: smoothCurve([
+        {
+          angleInDegrees: underarmAngle,
+          distance: (UPf[1] - WPf[1]) / 3,
+          origin: UPf,
+        },
+        {
+          angleInDegrees: 270,
+          distance: (UPf[1] - WPf[1]) / 3,
+          origin: WPf,
+        },
+        {
+          angleInDegrees: 270,
+          distance: (WPf[1] - HPf[1]) / 3,
+          origin: HPf,
         },
       ]),
     }

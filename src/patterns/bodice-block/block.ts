@@ -56,6 +56,7 @@ export interface IBodiceBlock extends IBlock {
     SPf: IPoint,
     ChP: IPoint,
     UPf: IPoint,
+    WPf: IPoint,
   },
   angles: {
     underarmAngle: number,
@@ -132,6 +133,12 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
 
   const HPf: IPoint = [centerFront - (measurements.H / 4 + 3), lineH]
 
+  const WPf = point.fromSlopeIntersection(
+    new paths.Line(UPf, HPf),
+    new paths.Line([0, lineW], [1, lineW]),
+  )
+  WPf[0] += 1.5
+
   return {
     angles: {
       underarmAngle,
@@ -150,6 +157,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
       UP,
       UPf,
       WP,
+      WPf,
     },
     x: {
       backWidth,
