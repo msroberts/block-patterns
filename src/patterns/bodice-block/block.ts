@@ -54,6 +54,8 @@ export interface IBodiceBlock extends IBlock {
     NPf: IPoint,
     HPf: IPoint,
     SPf: IPoint,
+    ChP: IPoint,
+    UPf: IPoint,
   },
   angles: {
     underarmAngle: number,
@@ -112,6 +114,22 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
   const SPf = pointAtAngle(NPf, shoulderAngleFront, measurements.S + shoulderDartWidthFront)
   const shoulderDartFront = dart({ base, point0, point1 }, NPf, SPf)
 
+  const ChP: IPoint = [
+    centerFront - (point.fromSlopeIntersection(
+      new paths.Line([0, lineC], [1, lineC]),
+      new paths.Line(base, point0),
+    )[0] - point.fromSlopeIntersection(
+      new paths.Line([0, lineC], [1, lineC]),
+      new paths.Line(base, point1),
+    )[0] + measurements.Ch / 2),
+    lineC,
+  ]
+
+  const UPf: IPoint = [
+    centerFront - (measurements.B / 2 + 5 - (UP[0] - centerBack)),
+    UP[1],
+  ]
+
   const HPf: IPoint = [centerFront - (measurements.H / 4 + 3), lineH]
 
   return {
@@ -122,6 +140,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
       shoulderDartFront,
     },
     points: {
+      ChP,
       HP,
       HPf,
       NP,
@@ -129,6 +148,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
       SP,
       SPf,
       UP,
+      UPf,
       WP,
     },
     x: {
