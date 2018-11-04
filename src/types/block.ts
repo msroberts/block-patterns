@@ -10,4 +10,7 @@ export interface IBlock {
   points: {
     [key: string]: IPoint,
   },
+  angles: {
+    [key: string]: number,
+  }
 }
