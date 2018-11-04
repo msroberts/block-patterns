@@ -21,7 +21,7 @@ const measurements: IBodiceMeasurements = {
 const block = bodiceBlock(measurements)
 
 const svg = exporter.toSVG({models: {
-  back: model.layer(new BodiceBack(block), 'block'),
+  back: model.layer(new BodiceBack(block), 'back'),
   front: model.layer(new BodiceFront(block), 'front'),
 }})
 
