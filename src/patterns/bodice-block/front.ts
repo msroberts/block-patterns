@@ -68,7 +68,7 @@ export class BodiceFront implements IModel {
       ]),
       neckline: smoothCurve([
         {
-          angleInDegrees: angle.ofPointInDegrees(NPf, point0) + 90,
+          angleInDegrees: 270,
           distance: (NPf[1] - neckline) / 3,
           origin: NPf,
         },

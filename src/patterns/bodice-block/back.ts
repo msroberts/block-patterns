@@ -9,6 +9,7 @@ export interface IBodiceBack extends IModelMap {
   armhole: IModel,
   shoulder: IModel,
   neckline: IModel,
+  shoulderDart: IModel,
 }
 
 export class BodiceBack implements IModel {
@@ -35,15 +36,20 @@ export class BodiceBack implements IModel {
     const {
       underarmAngle,
     } = block.angles
+    const {
+      shoulderDartBack,
+      shoulderDartFront,
+    } = block.darts
 
     const armholePoint: IPoint = [centerBack + backWidth, linexB]
-
-    const shoulderAngle = angle.ofPointInDegrees(NP, SP)
 
     this.models = {
       armhole: smoothCurve([
         {
-          angleInDegrees: Math.min(shoulderAngle, angle.ofPointInDegrees(SP, armholePoint)),
+          angleInDegrees: Math.min(
+            angle.ofPointInDegrees(SP, shoulderDartBack.point1) + 90,
+            angle.ofPointInDegrees(SP, armholePoint),
+          ),
           distance: (SP[1] - linexB) / 3,
           origin: SP,
         },
@@ -65,7 +71,8 @@ export class BodiceBack implements IModel {
       ]),
       neckline: smoothCurve([
         {
-          angleInDegrees: shoulderAngle - 90,
+          angleInDegrees: angle.ofPointInDegrees(shoulderDartBack.point0, NP) -
+            angle.ofPointInDegrees(block.points.NPf, shoulderDartFront.point0) - 90,
           distance: NP[1] - O,
           origin: NP,
         },
@@ -77,7 +84,15 @@ export class BodiceBack implements IModel {
       ]),
       shoulder: new models.ConnectTheDots(false, [
         NP,
+        shoulderDartBack.point0,
+        shoulderDartBack.bisector,
+        shoulderDartBack.point1,
         SP,
+      ]),
+      shoulderDart: new models.ConnectTheDots(false, [
+        shoulderDartBack.point0,
+        shoulderDartBack.base,
+        shoulderDartBack.point1,
       ]),
       underarm: smoothCurve([
         {

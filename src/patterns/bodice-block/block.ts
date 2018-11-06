@@ -9,7 +9,7 @@ import { IBlock } from '../../types/block'
 import { IMeasurements } from '../../types/measurements'
 
 import { dart, IAdjustedDart } from '../../helpers/dart'
-import { pointAtAngle } from '../../helpers/point-angles'
+import { pointAtAngle, pointAtDistance } from '../../helpers/point-angles'
 
 export interface IBodiceMeasurements extends IMeasurements {
   B: number,
@@ -63,6 +63,7 @@ export interface IBodiceBlock extends IBlock {
   },
   darts: {
     shoulderDartFront: IAdjustedDart,
+    shoulderDartBack: IAdjustedDart,
   },
 }
 
@@ -139,11 +140,23 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
   )
   WPf[0] += 1.5
 
+  const backDartOuter = pointAtDistance(SP, NP, measurements.S / 2)
+  const shoulderDartBack = dart({
+    base: pointAtDistance(
+      backDartOuter,
+      [centerBack + measurements.xB / 4, lineB],
+      (backDartOuter[1] - lineB) / 2,
+    ),
+    point0: pointAtDistance(NP, SP, measurements.S / 2),
+    point1: backDartOuter,
+  }, NP, SP)
+
   return {
     angles: {
       underarmAngle,
     },
     darts: {
+      shoulderDartBack,
       shoulderDartFront,
     },
     points: {
