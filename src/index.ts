@@ -3,6 +3,8 @@ import { exporter, model } from 'makerjs'
 import { BodiceBack } from './patterns/bodice-block/back'
 import { bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block/block'
 import { BodiceFront } from './patterns/bodice-block/front'
+import { BodiceBackShaped } from './patterns/bodice-shaped/back'
+import { bodiceBlockShaped } from './patterns/bodice-shaped/block'
 
 const measurements: IBodiceMeasurements = {
   B: 92,
@@ -28,3 +30,11 @@ const svg = exporter.toSVG({models: {
 }})
 
 writeFile('output.svg', svg, console.log)
+
+const blockShaped = bodiceBlockShaped(block, measurements)
+
+const svg2 = exporter.toSVG({models: {
+  backShaped: model.layer(new BodiceBackShaped(blockShaped), 'back'),
+}})
+
+writeFile('output-shaped.svg', svg2, console.log)
