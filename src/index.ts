@@ -1,5 +1,5 @@
 import { writeFile } from 'fs'
-import { exporter, model } from 'makerjs'
+import { exporter, IModel, model } from 'makerjs'
 import { BodiceBack } from './patterns/bodice-block/back'
 import { bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block/block'
 import { BodiceFront } from './patterns/bodice-block/front'
@@ -24,17 +24,13 @@ const measurements: IBodiceMeasurements = {
 
 const block = bodiceBlock(measurements)
 
-const svg = exporter.toSVG({models: {
+const svg: IModel = {models: {
   back: model.layer(new BodiceBack(block), 'back'),
   front: model.layer(new BodiceFront(block), 'front'),
-}})
-
-writeFile('output.svg', svg, console.log)
+}}
 
 const blockShaped = bodiceBlockShaped(block, measurements)
 
-const svg2 = exporter.toSVG({models: {
-  backShaped: model.layer(new BodiceBackShaped(blockShaped), 'back'),
-}})
+svg.models!.backShaped = model.layer(new BodiceBackShaped(blockShaped), 'back')
 
-writeFile('output-shaped.svg', svg2, console.log)
+writeFile('output.svg', exporter.toSVG(svg), console.log)
