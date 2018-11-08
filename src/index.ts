@@ -25,12 +25,12 @@ const measurements: IBodiceMeasurements = {
 const block = bodiceBlock(measurements)
 
 const svg: IModel = {models: {
-  back: model.layer(new BodiceBack(block), 'back'),
-  front: model.layer(new BodiceFront(block), 'front'),
+  back: model.layer(new BodiceBack(block), 'green'),
+  front: model.layer(new BodiceFront(block), 'red'),
 }}
 
 const blockShaped = bodiceBlockShaped(block, measurements)
 
-svg.models!.backShaped = model.layer(new BodiceBackShaped(blockShaped), 'back')
+svg.models!.backShaped = model.layer(new BodiceBackShaped(blockShaped), 'blue')
 
 writeFile('output.svg', exporter.toSVG(svg), console.log)
