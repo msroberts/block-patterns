@@ -32,18 +32,16 @@ export function bodiceBlockShaped (
   const WP = point.add(block.points.WP, [-1, -0.5])
   const WPf = point.add(block.points.WPf, [1, -0.5])
 
-  const points = {
-    WP,
-    WPf,
-    ...block.points,
-  }
-
   return {
     angles: {
     },
     bodiceBlock: {
-      points,
       ...block,
+      points: {
+        ...block.points,
+        WP,
+        WPf,
+      },
     },
     darts: {
     },
