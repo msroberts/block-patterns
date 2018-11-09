@@ -1,4 +1,5 @@
 import { IModel, IModelMap, models } from 'makerjs'
+import { smoothCurve } from '../../helpers/curve'
 import { BodiceBack } from '../bodice-block/back'
 import { IBodiceBlockShaped } from './block'
 
@@ -21,8 +22,10 @@ export class BodiceBackShaped implements IModel {
     const {
       O,
       linexB,
+      lineB,
     } = block.bodiceBlock.y
     const {
+      UP,
       WP,
     } = block.bodiceBlock.points
 
@@ -35,6 +38,18 @@ export class BodiceBackShaped implements IModel {
         [centerBack, linexB],
         block.points.centerBackInner,
         WP,
+      ]),
+      underarm: smoothCurve([
+        {
+          angleInDegrees: block.bodiceBlock.angles.underarmAngle,
+          distance: (lineB - WP[1]) / 2,
+          origin: UP,
+        },
+        {
+          angleInDegrees: 270,
+          distance: (lineB - WP[1]) / 3,
+          origin: WP,
+        },
       ]),
     }
   }
