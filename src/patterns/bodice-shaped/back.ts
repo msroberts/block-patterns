@@ -50,7 +50,7 @@ export class BodiceBackShaped implements IModel {
       underarm: smoothCurve([
         {
           angleInDegrees: block.bodiceBlock.angles.underarmAngle,
-          distance: (lineB - WP[1]) / 2,
+          distance: (lineB - WP[1]) / 3,
           origin: UP,
         },
         {
