@@ -10,6 +10,7 @@ export interface IBodiceBackShaped extends IModelMap {
   shoulder: IModel,
   neckline: IModel,
   shoulderDart: IModel,
+  waistDart: IModel,
 }
 
 export class BodiceBackShaped implements IModel {
@@ -29,6 +30,10 @@ export class BodiceBackShaped implements IModel {
       WP,
     } = block.bodiceBlock.points
 
+    const {
+      backWaistDart,
+    } = block.darts
+
     const back = new BodiceBack(block.bodiceBlock)
 
     this.models = {
@@ -37,6 +42,9 @@ export class BodiceBackShaped implements IModel {
         [centerBack, O],
         [centerBack, linexB],
         block.points.centerBackInner,
+        backWaistDart.point0,
+        backWaistDart.bisector,
+        backWaistDart.point1,
         WP,
       ]),
       underarm: smoothCurve([
@@ -50,6 +58,11 @@ export class BodiceBackShaped implements IModel {
           distance: (lineB - WP[1]) / 3,
           origin: WP,
         },
+      ]),
+      waistDart: new models.ConnectTheDots(false, [
+        backWaistDart.point0,
+        backWaistDart.base,
+        backWaistDart.point1,
       ]),
     }
   }
