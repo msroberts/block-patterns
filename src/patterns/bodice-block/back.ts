@@ -1,6 +1,7 @@
 import { angle, IModel, IModelMap, IPoint, models } from 'makerjs'
 
 import { smoothCurve } from '../../helpers/curve'
+import { dots } from '../../helpers/dots'
 import { IBodiceBlock } from './block'
 
 export interface IBodiceBack extends IModelMap {
@@ -10,6 +11,7 @@ export interface IBodiceBack extends IModelMap {
   shoulder: IModel,
   neckline: IModel,
   shoulderDart: IModel,
+  dots: IModel,
 }
 
 export class BodiceBack implements IModel {
@@ -68,6 +70,11 @@ export class BodiceBack implements IModel {
         [centerBack, O],
         [centerBack, lineH],
         HP,
+      ]),
+      dots: dots([
+        [backWidth / 2, linexB],
+        [backWidth / 2, lineB],
+        armholePoint,
       ]),
       neckline: smoothCurve([
         {
