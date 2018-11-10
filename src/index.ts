@@ -5,6 +5,7 @@ import { bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block/block'
 import { BodiceFront } from './patterns/bodice-block/front'
 import { BodiceBackShaped } from './patterns/bodice-shaped/back'
 import { bodiceBlockShaped } from './patterns/bodice-shaped/block'
+import { BodiceFrontShaped } from './patterns/bodice-shaped/front'
 
 const measurements: IBodiceMeasurements = {
   B: 92,
@@ -32,5 +33,6 @@ const svg: IModel = {models: {
 const blockShaped = bodiceBlockShaped(block, measurements)
 
 svg.models!.backShaped = model.layer(new BodiceBackShaped(blockShaped), 'blue')
+svg.models!.frontShaped = model.layer(new BodiceFrontShaped(blockShaped), 'fuchsia')
 
 writeFile('output.svg', exporter.toSVG(svg), console.log)
