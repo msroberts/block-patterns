@@ -81,7 +81,7 @@ export function bodiceBlockShaped (
       frontWaistDart: {
         ...frontWaistDart,
         bisector: point.fromSlopeIntersection(
-          new paths.Line(centerFrontInner, frontWaistDart.point0),
+          new paths.Line(WPf, frontWaistDart.point1),
           new paths.Line(frontWaistDart.base, point.add(frontWaistDart.base, [0, -1])),
         ),
       },
