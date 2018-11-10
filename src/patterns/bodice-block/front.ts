@@ -51,7 +51,7 @@ export class BodiceFront implements IModel {
           origin: SPf,
         },
         {
-          angleInDegrees: 270,
+          angleInDegrees: underarmAngle,
           distance: (ChP[1] - UPf[1]) * 2 / 3,
           origin: ChP,
         },
