@@ -41,8 +41,8 @@ export function bodiceBlockShaped (
   const backWaistDartBase: IPoint = [centerBack + measurements.xB / 4, lineB - 4]
   const backWaistDart: IDart = {
     base: backWaistDartBase,
-    point0: [backWaistDartBase[0] - 2, WP[1]],
-    point1: [backWaistDartBase[0] + 2, WP[1]],
+    point0: [backWaistDartBase[0] - 1, WP[1]],
+    point1: [backWaistDartBase[0] + 1, WP[1]],
   }
 
   const frontWaistDartBase: IPoint = [centerFront - measurements.Ch / 4, lineB - 6]
