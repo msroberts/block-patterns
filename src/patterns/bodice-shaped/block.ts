@@ -14,6 +14,7 @@ export interface IBodiceBlockShaped extends IBlock {
   },
   darts: {
     backWaistDart: IAdjustedDart,
+    frontWaistDart: IAdjustedDart,
   }
   bodiceBlock: IBodiceBlock,
 }
@@ -44,6 +45,20 @@ export function bodiceBlockShaped (
     point1: [backWaistDartBase[0] + 2, WP[1]],
   }
 
+  const frontWaistDartBase: IPoint = [centerFront - measurements.Ch / 4, lineB - 6]
+  const frontWaistDartWidth = WR - (
+    centerBackInner[0] - centerBack
+    + backWaistDart.point1[0] - backWaistDart.point0[0]
+    + centerFront - centerFrontInner[0]
+    + 2
+  )
+
+  const frontWaistDart: IDart = {
+    base: frontWaistDartBase,
+    point0: [frontWaistDartBase[0] + frontWaistDartWidth / 2, centerFrontInner[1]],
+    point1: [frontWaistDartBase[0] - frontWaistDartWidth / 2, centerFrontInner[1]],
+  }
+
   return {
     angles: {
     },
@@ -61,6 +76,13 @@ export function bodiceBlockShaped (
         bisector: point.fromSlopeIntersection(
           new paths.Line(centerBackInner, backWaistDart.point0),
           new paths.Line(backWaistDart.base, point.add(backWaistDart.base, [0, -1])),
+        ),
+      },
+      frontWaistDart: {
+        ...frontWaistDart,
+        bisector: point.fromSlopeIntersection(
+          new paths.Line(centerFrontInner, frontWaistDart.point0),
+          new paths.Line(frontWaistDart.base, point.add(frontWaistDart.base, [0, -1])),
         ),
       },
     },

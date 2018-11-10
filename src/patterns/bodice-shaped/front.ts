@@ -10,6 +10,7 @@ export interface IBodiceFrontShaped extends IModelMap {
   armhole: IModel,
   underarm: IModel,
   shoulderDart: IModel,
+  waistDart: IModel,
 }
 
 export class BodiceFrontShaped implements IModel {
@@ -35,6 +36,9 @@ export class BodiceFrontShaped implements IModel {
     const {
       centerFrontInner,
     } = block.points
+    const {
+      frontWaistDart,
+    } = block.darts
 
     this.models = {
       ...front.models,
@@ -42,6 +46,9 @@ export class BodiceFrontShaped implements IModel {
         [centerFront, neckline],
         [centerFront, lineC],
         centerFrontInner,
+        frontWaistDart.point0,
+        frontWaistDart.bisector,
+        frontWaistDart.point1,
         WPf,
       ]),
       underarm: smoothCurve([
@@ -55,6 +62,11 @@ export class BodiceFrontShaped implements IModel {
           distance: (UPf[1] - WPf[1]) / 3,
           origin: WPf,
         },
+      ]),
+      waistDart: new models.ConnectTheDots(false, [
+        frontWaistDart.point0,
+        frontWaistDart.base,
+        frontWaistDart.point1,
       ]),
     }
   }
