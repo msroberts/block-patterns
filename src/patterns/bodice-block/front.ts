@@ -1,4 +1,4 @@
-import { angle, IModel, IModelMap, models, point } from 'makerjs'
+import { angle, IModel, IModelMap, models } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
 import { dots } from '../../helpers/dots'
 import { IBodiceBlock } from './block'
@@ -31,6 +31,7 @@ export class BodiceFront implements IModel {
       ChP,
       UPf,
       WPf,
+      X,
     } = block.points
     const {
       base,
@@ -69,7 +70,7 @@ export class BodiceFront implements IModel {
         HPf,
       ]),
       dots: dots([
-        point.add(base, [0,-1]),
+        X,
         ChP,
       ]),
       neckline: smoothCurve([

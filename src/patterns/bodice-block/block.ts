@@ -57,6 +57,7 @@ export interface IBodiceBlock extends IBlock {
     ChP: IPoint,
     UPf: IPoint,
     WPf: IPoint,
+    X: IPoint,
   },
   angles: {
     underarmAngle: number,
@@ -140,6 +141,8 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
   )
   WPf[0] += 1.5
 
+  const X: IPoint = [centerFront - measurements.Ch / 4, lineB - 4]
+
   const backDartOuter = pointAtDistance(SP, NP, measurements.S / 2)
   const shoulderDartBack = dart({
     base: pointAtDistance(
@@ -171,6 +174,7 @@ export function bodiceBlock (measurements: IBodiceMeasurements): IBodiceBlock {
       UPf,
       WP,
       WPf,
+      X,
     },
     x: {
       backWidth,
