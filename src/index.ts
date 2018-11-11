@@ -1,4 +1,6 @@
 import { generatePattern } from './generate'
 
-generatePattern('measurements.json', 'output.svg')
+const [input, output] = process.argv.slice(2)
+
+generatePattern(input, output)
   .catch(console.error)

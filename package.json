@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint --project ./ 'src/**/*.ts'",
     "lint:fix": "tslint --fix --project ./ 'src/**/*.ts'",
-    "start": "node ./dist",
+    "start": "node ./dist measurements.json output.svg",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
