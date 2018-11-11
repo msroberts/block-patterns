@@ -1,4 +1,4 @@
-import { angle, IModel, IModelMap, models, paths } from 'makerjs'
+import { angle, IModel, IModelMap, paths } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
 import { dots } from '../../helpers/dots'
 import { ISleeveBlock } from './block'
@@ -8,7 +8,7 @@ export interface ISleeve extends IModelMap {
   outline: IModel,
   lowerEdge: IModel,
   dots: IModel,
-  lineE: IModel,
+  lines: IModel,
 }
 
 export class Sleeve implements IModel {
@@ -68,10 +68,16 @@ export class Sleeve implements IModel {
         Uf,
         E,
       ]),
-      lineE: new models.ConnectTheDots(false, [
-        T,
-        E,
-      ]),
+      lines: {
+        paths: {
+          lineB: new paths.Line(B, Bl),
+          lineE: new paths.Line(T, E),
+          lineF: new paths.Line(F, Fl),
+          lineT: new paths.Line(T, Tl),
+          lineU: new paths.Line(U, Ul),
+          lineUf: new paths.Line(Uf, Ufl),
+        },
+      },
       lowerEdge: smoothCurve([
         {
           angleInDegrees: 360 - angleInDegrees,
