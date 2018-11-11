@@ -31,7 +31,10 @@ const sleeve = sleeveBlock(measurements)
 const svg: IModel = {models: {
   back: model.layer(new BodiceBack(block), 'green'),
   front: model.layer(new BodiceFront(block), 'red'),
-  sleeve: model.layer(new Sleeve(sleeve), 'orange'),
+  sleeve: model.move(
+    model.layer(new Sleeve(sleeve), 'orange'),
+    [block.x.centerFront + 2, 0],
+  ),
 }}
 
 const blockShaped = bodiceBlockShaped(block, measurements)
