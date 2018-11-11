@@ -6,8 +6,10 @@ import { BodiceFront } from './patterns/bodice-block/front'
 import { BodiceBackShaped } from './patterns/bodice-shaped/back'
 import { bodiceBlockShaped } from './patterns/bodice-shaped/block'
 import { BodiceFrontShaped } from './patterns/bodice-shaped/front'
+import { ISleeveMeasurements, sleeveBlock } from './patterns/sleeve/block'
+import { Sleeve } from './patterns/sleeve/sleeve'
 
-const measurements: IBodiceMeasurements = {
+const measurements: IBodiceMeasurements & ISleeveMeasurements = {
   B: 92,
   H: 98,
   W: 70,
@@ -24,10 +26,12 @@ const measurements: IBodiceMeasurements = {
 }
 
 const block = bodiceBlock(measurements)
+const sleeve = sleeveBlock(measurements)
 
 const svg: IModel = {models: {
   back: model.layer(new BodiceBack(block), 'green'),
   front: model.layer(new BodiceFront(block), 'red'),
+  sleeve: model.layer(new Sleeve(sleeve), 'orange'),
 }}
 
 const blockShaped = bodiceBlockShaped(block, measurements)

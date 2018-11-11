@@ -19,11 +19,6 @@ export interface IBodiceMeasurements extends IMeasurements {
   xB: number,
   Ch: number,
   S: number,
-  TA: number,
-  LA: number,
-  LE: number,
-  Ew: number,
-  Wr: number,
 }
 
 export interface IBodiceBlock extends IBlock {
