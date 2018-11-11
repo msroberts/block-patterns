@@ -30,6 +30,7 @@ export class Sleeve implements IModel {
     } = block.points
     const {
       lineU,
+      lineT,
       lineUf,
     } = block.x
     const {
@@ -82,6 +83,7 @@ export class Sleeve implements IModel {
           balanceUpper: new paths.Line([lineU, balanceUpper], [lineUf, balanceUpper]),
           lineB: new paths.Line(B, Bl),
           lineE: new paths.Line(T, E),
+          lineEh: new paths.Line([lineU, E[1]], [lineT, E[1]]),
           lineF: new paths.Line(F, Fl),
           lineT: new paths.Line(T, Tl),
           lineU: new paths.Line(U, Ul),
