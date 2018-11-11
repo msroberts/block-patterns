@@ -28,6 +28,14 @@ export class Sleeve implements IModel {
       Fl,
       Ufl,
     } = block.points
+    const {
+      lineU,
+      lineUf,
+    } = block.x
+    const {
+      balanceUpper,
+      balanceLower,
+    } = block.y
 
     const distance = (B[0] - U[0]) * 3 / 8
     const angleInDegrees = angle.toDegrees(block.angles.lowerAngle)
@@ -70,6 +78,8 @@ export class Sleeve implements IModel {
       ]),
       lines: {
         paths: {
+          balanceLower: new paths.Line([lineU, balanceLower], [lineUf, balanceLower]),
+          balanceUpper: new paths.Line([lineU, balanceUpper], [lineUf, balanceUpper]),
           lineB: new paths.Line(B, Bl),
           lineE: new paths.Line(T, E),
           lineF: new paths.Line(F, Fl),

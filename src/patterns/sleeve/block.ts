@@ -20,6 +20,8 @@ export interface ISleeveBlock extends IBlock {
     lineUf: number,
   },
   y: {
+    balanceUpper: number,
+    balanceLower: number,
     height: number,
     depth: number,
     topLine: number,
@@ -74,6 +76,9 @@ export function sleeveBlock (measurements: IMeasurements, additionalWidth: numbe
     topLine - (measurements.LE ** 2 - (lineT - lineB) ** 2) ** (1 / 2),
   ]
 
+  const balanceUpper = E[1] + 7.5
+  const balanceLower = E[1] - 5
+
   const lowerAngle = angle.ofPointInRadians(Bl, Fl)
 
   return {
@@ -104,6 +109,8 @@ export function sleeveBlock (measurements: IMeasurements, additionalWidth: numbe
       width,
     },
     y: {
+      balanceLower,
+      balanceUpper,
       depth,
       height,
       topLine,
