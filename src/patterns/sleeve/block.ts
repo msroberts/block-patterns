@@ -29,6 +29,7 @@ export interface ISleeveBlock extends IBlock {
     T: IPoint,
     F: IPoint,
     Uf: IPoint,
+    E: IPoint,
   }
 }
 
@@ -49,6 +50,11 @@ export function sleeveBlock (measurements: IMeasurements, additionalWidth: numbe
   const F: IPoint = [lineF, topLine - 6]
   const Uf: IPoint = [lineUf, U[1]]
 
+  const E: IPoint = [
+    lineB,
+    topLine - (measurements.LE ** 2 - (lineT - lineB) ** 2) ** (1 / 2),
+  ]
+
   return {
     angles: {
     },
@@ -56,6 +62,7 @@ export function sleeveBlock (measurements: IMeasurements, additionalWidth: numbe
     },
     points: {
       B,
+      E,
       F,
       T,
       U,

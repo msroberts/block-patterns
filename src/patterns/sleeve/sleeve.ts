@@ -1,9 +1,10 @@
-import { IModel, IModelMap } from 'makerjs'
+import { IModel, IModelMap, models } from 'makerjs'
 import { dots } from '../../helpers/dots'
 import { ISleeveBlock } from './block'
 
 export interface ISleeve extends IModelMap {
-  dots: IModel
+  dots: IModel,
+  lineE: IModel,
 }
 
 export class Sleeve implements IModel {
@@ -16,6 +17,7 @@ export class Sleeve implements IModel {
       T,
       F,
       Uf,
+      E,
     } = block.points
 
     this.models = {
@@ -25,6 +27,11 @@ export class Sleeve implements IModel {
         T,
         F,
         Uf,
+        E,
+      ]),
+      lineE: new models.ConnectTheDots(false, [
+        T,
+        E,
       ]),
     }
   }
