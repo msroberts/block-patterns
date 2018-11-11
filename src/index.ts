@@ -1,5 +1,5 @@
 import { writeFile } from 'fs'
-import { exporter, IModel, model } from 'makerjs'
+import { exporter, IModel, model, unitType } from 'makerjs'
 import { BodiceBack } from './patterns/bodice-block/back'
 import { bodiceBlock, IBodiceMeasurements } from './patterns/bodice-block/block'
 import { BodiceFront } from './patterns/bodice-block/front'
@@ -28,14 +28,17 @@ const measurements: IBodiceMeasurements & ISleeveMeasurements = {
 const block = bodiceBlock(measurements)
 const sleeve = sleeveBlock(measurements)
 
-const svg: IModel = {models: {
-  back: model.layer(new BodiceBack(block), 'green'),
-  front: model.layer(new BodiceFront(block), 'red'),
-  sleeve: model.move(
-    model.layer(new Sleeve(sleeve), 'orange'),
-    [block.x.centerFront + 2, 0],
-  ),
-}}
+const svg: IModel = {
+  models: {
+    back: model.layer(new BodiceBack(block), 'green'),
+    front: model.layer(new BodiceFront(block), 'red'),
+    sleeve: model.move(
+      model.layer(new Sleeve(sleeve), 'orange'),
+      [block.x.centerFront + 2, 0],
+    ),
+  },
+  units: unitType.Centimeter,
+}
 
 const blockShaped = bodiceBlockShaped(block, measurements)
 
