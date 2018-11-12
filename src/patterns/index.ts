@@ -4,6 +4,7 @@ import { bodiceBlock, IBodiceMeasurements } from './bodice-block/block'
 import { BodiceFront } from './bodice-block/front'
 import { BodiceBackShaped } from './bodice-shaped/back'
 import { bodiceBlockShaped } from './bodice-shaped/block'
+import { longDart } from './bodice-shaped/dart'
 import { BodiceFrontShaped } from './bodice-shaped/front'
 import { ISleeveMeasurements, sleeveBlock } from './sleeve/block'
 import { Sleeve } from './sleeve/sleeve'
@@ -29,6 +30,9 @@ export class BlockPatterns implements IModel {
     const front = model.layer(new BodiceFront(block), 'red')
 
     const blockShaped = bodiceBlockShaped(block, measurements)
+
+    model.addModel(back, longDart(blockShaped.darts.backWaistDart, block.y.lineW), 'backWaistDart')
+    model.addModel(front, longDart(blockShaped.darts.frontWaistDart, block.y.lineW), 'frontWaistDart')
 
     const backShaped = model.layer(new BodiceBackShaped(blockShaped), 'blue')
     const frontShaped = model.layer(new BodiceFrontShaped(blockShaped), 'fuchsia')
