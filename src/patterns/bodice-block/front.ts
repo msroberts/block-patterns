@@ -1,4 +1,4 @@
-import { angle, IModel, IModelMap, models } from 'makerjs'
+import { angle, IModel, IModelMap, models, paths } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
 import { dots } from '../../helpers/dots'
 import { IBodiceBlock } from './block'
@@ -11,6 +11,7 @@ export interface IBodiceFront extends IModelMap {
   underarm: IModel,
   shoulderDart: IModel,
   dots: IModel,
+  lines: IModel,
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -73,6 +74,11 @@ export class BodiceFront implements IModel {
         X,
         ChP,
       ]),
+      lines: {
+        paths: {
+          sideDart: new paths.Line(X, [UPf[0], X[1]]),
+        },
+      },
       neckline: smoothCurve([
         {
           angleInDegrees: 270,
