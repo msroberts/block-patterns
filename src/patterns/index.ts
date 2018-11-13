@@ -1,4 +1,5 @@
 import { IModel, IModelMap, model, unitType } from 'makerjs'
+import { Scale } from '../helpers/scale'
 import { BodiceBack } from './bodice-block/back'
 import { bodiceBlock, IBodiceMeasurements } from './bodice-block/block'
 import { BodiceFront } from './bodice-block/front'
@@ -42,6 +43,7 @@ export class BlockPatterns implements IModel {
       backShaped,
       front,
       frontShaped,
+      scale: model.layer(new Scale([block.points.UP[0], -11]), 'black'),
       sleeve: model.move(
         model.layer(new Sleeve(sleeve), 'orange'),
         [block.x.centerFront + 2, 0],
