@@ -7,6 +7,8 @@ import { BodiceBackShaped } from './bodice-shaped/back'
 import { bodiceBlockShaped } from './bodice-shaped/block'
 import { longDart } from './bodice-shaped/dart'
 import { BodiceFrontShaped } from './bodice-shaped/front'
+import { skirtBlock } from './skirt/block'
+import { Skirt } from './skirt/skirt'
 import { ISleeveMeasurements, sleeveBlock } from './sleeve/block'
 import { Sleeve } from './sleeve/sleeve'
 
@@ -26,6 +28,7 @@ export class BlockPatterns implements IModel {
   constructor (measurements: IBodiceMeasurements & ISleeveMeasurements) {
     const block = bodiceBlock(measurements)
     const sleeve = sleeveBlock(measurements)
+    const skirt = skirtBlock(measurements)
 
     const back = model.layer(new BodiceBack(block), 'green')
     const front = model.layer(new BodiceFront(block), 'red')
@@ -44,6 +47,10 @@ export class BlockPatterns implements IModel {
       front,
       frontShaped,
       scale: model.layer(new Scale([block.points.UP[0], -11]), 'black'),
+      skirt: model.move(
+        model.layer(new Skirt(skirt), 'aqua'),
+        [-2, 0],
+      ),
       sleeve: model.move(
         model.layer(new Sleeve(sleeve), 'orange'),
         [block.x.centerFront + 2, 0],
