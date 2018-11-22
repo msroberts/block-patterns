@@ -1,5 +1,5 @@
 import { IPoint } from 'makerjs'
-import { pointAtAngle } from '../../helpers/point-angles'
+import { pointAtAngle, rectanglePoints } from '../../helpers/point-angles'
 import { IBlock } from '../../types/block'
 import { IMeasurements } from '../../types/measurements'
 
@@ -34,6 +34,22 @@ export interface ISkirtBlock extends IBlock {
     HP2: IPoint,
     HP3: IPoint,
     HP4: IPoint,
+    k0a: IPoint,
+    k0b: IPoint,
+    k1a: IPoint,
+    k1b: IPoint,
+    k2a: IPoint,
+    k2b: IPoint,
+    k3a: IPoint,
+    k3b: IPoint,
+    h0a: IPoint,
+    h0b: IPoint,
+    h1a: IPoint,
+    h1b: IPoint,
+    h2a: IPoint,
+    h2b: IPoint,
+    h3a: IPoint,
+    h3b: IPoint,
   }
 }
 
@@ -65,6 +81,16 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
   const HP3 = pointAtAngle(HP2, a2, sectionWidth)
   const HP4 = pointAtAngle(HP3, a3, sectionWidth)
 
+  const [k0b, k0a] = rectanglePoints(HP0, HP1, lineH - lineK)
+  const [k1b, k1a] = rectanglePoints(HP1, HP2, lineH - lineK)
+  const [k2b, k2a] = rectanglePoints(HP2, HP3, lineH - lineK)
+  const [k3b, k3a] = rectanglePoints(HP3, HP4, lineH - lineK)
+
+  const [h0b, h0a] = rectanglePoints(HP0, HP1, lineH - hemline)
+  const [h1b, h1a] = rectanglePoints(HP1, HP2, lineH - hemline)
+  const [h2b, h2a] = rectanglePoints(HP2, HP3, lineH - hemline)
+  const [h3b, h3a] = rectanglePoints(HP3, HP4, lineH - hemline)
+
   return {
     angles: {
       a0,
@@ -81,6 +107,22 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
       HP2,
       HP3,
       HP4,
+      h0a,
+      h0b,
+      h1a,
+      h1b,
+      h2a,
+      h2b,
+      h3a,
+      h3b,
+      k0a,
+      k0b,
+      k1a,
+      k1b,
+      k2a,
+      k2b,
+      k3a,
+      k3b,
     },
     x: {
       centerFront,

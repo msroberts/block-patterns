@@ -19,3 +19,11 @@ export function pointAtDistance (
 ): IPoint {
   return pointAtAngle(start, angle.ofPointInRadians(start, direction) + additionalAngleInRadians, distance)
 }
+
+export function rectanglePoints (point0: IPoint, point1: IPoint, distance: number): [IPoint, IPoint] {
+  const a = angle.ofPointInRadians(point0, point1) + Math.PI / 2
+  const point2 = pointAtAngle(point1, a, distance)
+  const point3 = pointAtAngle(point0, a, distance)
+
+  return [point2, point3]
+}
