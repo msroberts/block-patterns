@@ -1,5 +1,6 @@
-import { IPoint, paths, point } from 'makerjs'
-import { pointAtAngle, rectanglePoints } from '../../helpers/point-angles'
+import { angle, IPoint, measure, paths, point } from 'makerjs'
+import { arc } from '../../helpers/curve'
+import { pointAtAngle, pointAtDistance, rectanglePoints } from '../../helpers/point-angles'
 import { IBlock } from '../../types/block'
 import { IMeasurements } from '../../types/measurements'
 
@@ -13,6 +14,8 @@ export interface ISkirtBlock extends IBlock {
     centerFront: number,
     width: number,
     sectionWidth: number,
+    waist: number,
+    WR: number,
   },
   y: {
     lineW: number,
@@ -27,6 +30,7 @@ export interface ISkirtBlock extends IBlock {
     a1: number,
     a2: number,
     a3: number,
+    centerAngle: number,
   },
   points: {
     HP0: IPoint,
@@ -55,12 +59,21 @@ export interface ISkirtBlock extends IBlock {
     y0: IPoint,
     y1: IPoint,
     origin: IPoint,
+    centerW: IPoint,
+    centerWback: IPoint,
+    centerWfront: IPoint,
+    centerHem: IPoint,
   }
 }
 
-export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: number = 6): ISkirtBlock {
+export function skirtBlock (
+  measurements: ISkirtMeasurments,
+  additionalWidth: number = 6,
+  additionalWaist: number = 4,
+): ISkirtBlock {
   const length = 65
   const width = (measurements.H + additionalWidth) / 2
+  const waist = (measurements.W + additionalWaist) / 2
 
   const centerFront = 0
   const lineW = 0
@@ -107,12 +120,22 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
   const y0: IPoint = [centerFront, lineY]
   const y1 = rectanglePoints(HP4, HP3, lineY - lineH)[1]
 
+  const centerAngle = (angle.ofPointInRadians(origin, WP0) + angle.ofPointInRadians(origin, WP1)) / 2
+  const centerW = pointAtAngle(HP2, centerAngle, lineH - lineW)
+  const centerHem = pointAtAngle(HP2, centerAngle, lineH - hemline)
+
+  const WR = measure.pathLength(arc(WP1, origin, WP0)) - waist
+  const dartWidth = WR / 2
+  const centerWfront = pointAtDistance(centerW, WP0, dartWidth / 2)
+  const centerWback = pointAtDistance(centerW, WP1, dartWidth / 2)
+
   return {
     angles: {
       a0,
       a1,
       a2,
       a3,
+      centerAngle,
       innerAngle,
     },
     darts: {
@@ -125,6 +148,10 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
       HP4,
       WP0,
       WP1,
+      centerHem,
+      centerW,
+      centerWback,
+      centerWfront,
       h0a,
       h0b,
       h1a,
@@ -146,8 +173,10 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
       y1,
     },
     x: {
+      WR,
       centerFront,
       sectionWidth,
+      waist,
       width,
     },
     y: {

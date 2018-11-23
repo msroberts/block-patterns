@@ -7,6 +7,7 @@ export interface ISkirtLines extends IPathMap {
   centerFront: IPath,
   waistLine: IPath,
   yokeLine: IPath,
+  centerLine: IPath,
 }
 
 export interface ISkirt extends IModelMap {
@@ -16,6 +17,7 @@ export interface ISkirt extends IModelMap {
   innerLine1: IModel,
   innerLine2: IModel,
   kneeLine: IModel,
+  centerDart: IModel,
 }
 
 export class Skirt implements IModel {
@@ -50,9 +52,18 @@ export class Skirt implements IModel {
       origin,
       y0,
       y1,
+      centerW,
+      centerHem,
+      centerWback,
+      centerWfront,
     } = block.points
 
     this.models = {
+      centerDart: new models.ConnectTheDots(false, [
+        centerWback,
+        HP2,
+        centerWfront,
+      ]),
       hemLine: new models.ConnectTheDots(false, [
         h0a,
         h0b,
@@ -100,6 +111,7 @@ export class Skirt implements IModel {
     this.paths = {
       centerBack: new paths.Line(WP1, h3b),
       centerFront: new paths.Line(WP0, h0a),
+      centerLine: new paths.Line(centerW, centerHem),
       waistLine: arc(WP1, origin, WP0),
       yokeLine: arc(y1, origin, y0),
     }
