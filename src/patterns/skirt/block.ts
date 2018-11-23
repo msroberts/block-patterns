@@ -1,4 +1,4 @@
-import { IPoint } from 'makerjs'
+import { IPoint, paths, point } from 'makerjs'
 import { pointAtAngle, rectanglePoints } from '../../helpers/point-angles'
 import { IBlock } from '../../types/block'
 import { IMeasurements } from '../../types/measurements'
@@ -50,6 +50,11 @@ export interface ISkirtBlock extends IBlock {
     h2b: IPoint,
     h3a: IPoint,
     h3b: IPoint,
+    WP0: IPoint,
+    WP1: IPoint,
+    y0: IPoint,
+    y1: IPoint,
+    origin: IPoint,
   }
 }
 
@@ -91,6 +96,17 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
   const [h2b, h2a] = rectanglePoints(HP2, HP3, lineH - hemline)
   const [h3b, h3a] = rectanglePoints(HP3, HP4, lineH - hemline)
 
+  const WP0: IPoint = [centerFront, lineW]
+  const WP1 = rectanglePoints(HP4, HP3, lineW - lineH)[1]
+
+  const origin = point.fromSlopeIntersection(
+    new paths.Line(h0a, WP0),
+    new paths.Line(h3b, WP1),
+  )
+
+  const y0: IPoint = [centerFront, lineY]
+  const y1 = rectanglePoints(HP4, HP3, lineY - lineH)[1]
+
   return {
     angles: {
       a0,
@@ -107,6 +123,8 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
       HP2,
       HP3,
       HP4,
+      WP0,
+      WP1,
       h0a,
       h0b,
       h1a,
@@ -123,6 +141,9 @@ export function skirtBlock (measurements: ISkirtMeasurments, additionalWidth: nu
       k2b,
       k3a,
       k3b,
+      origin,
+      y0,
+      y1,
     },
     x: {
       centerFront,

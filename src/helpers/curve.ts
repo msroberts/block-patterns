@@ -1,4 +1,4 @@
-import { angle, IModel, IPoint, models } from 'makerjs'
+import { angle, IModel, IPoint, measure, models, paths } from 'makerjs'
 import { pointAtAngle } from './point-angles'
 
 export interface ICurvePoint {
@@ -26,4 +26,15 @@ export function smoothCurve (points: ICurvePoint[]): IModel {
   }
 
   return m
+}
+
+export function arc (point0: IPoint, origin: IPoint, point1: IPoint): paths.Arc {
+  const radius = measure.pointDistance(point0, origin)
+
+  return new paths.Arc(
+    origin,
+    radius,
+    angle.ofPointInDegrees(origin, point0),
+    angle.ofPointInDegrees(origin, point1),
+  )
 }

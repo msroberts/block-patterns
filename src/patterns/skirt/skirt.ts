@@ -1,4 +1,5 @@
-import { IModel, IModelMap, models } from 'makerjs'
+import { IModel, IModelMap, models, paths } from 'makerjs'
+import { arc } from '../../helpers/curve'
 import { ISkirtBlock } from './block'
 
 export class Skirt implements IModel {
@@ -11,6 +12,8 @@ export class Skirt implements IModel {
       HP2,
       HP3,
       HP4,
+      WP0,
+      WP1,
       h0a,
       h0b,
       h1a,
@@ -27,6 +30,9 @@ export class Skirt implements IModel {
       k2b,
       k3a,
       k3b,
+      origin,
+      y0,
+      y1,
     } = block.points
 
     this.models = {
@@ -72,6 +78,14 @@ export class Skirt implements IModel {
         k3a,
         k3b,
       ]),
+      lines: {
+        paths: {
+          centerBack: new paths.Line(WP1, h3b),
+          centerFront: new paths.Line(WP0, h0a),
+          waistLine: arc(WP1, origin, WP0),
+          yokeLine: arc(y1, origin, y0),
+        },
+      },
     }
   }
 }
