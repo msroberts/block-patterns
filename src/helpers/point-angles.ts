@@ -27,3 +27,7 @@ export function rectanglePoints (point0: IPoint, point1: IPoint, distance: numbe
 
   return [point2, point3]
 }
+
+export function rotateFn (origin: IPoint, angleInDegrees: number): (p: IPoint) => IPoint {
+  return (p: IPoint) => point.rotate(p, angleInDegrees, origin)
+}
