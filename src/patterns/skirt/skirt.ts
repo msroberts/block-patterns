@@ -1,9 +1,26 @@
-import { IModel, IModelMap, models, paths } from 'makerjs'
+import { IModel, IModelMap, IPath, IPathMap, models, paths } from 'makerjs'
 import { arc } from '../../helpers/curve'
 import { ISkirtBlock } from './block'
 
+export interface ISkirtLines extends IPathMap {
+  centerBack: IPath,
+  centerFront: IPath,
+  waistLine: IPath,
+  yokeLine: IPath,
+}
+
+export interface ISkirt extends IModelMap {
+  hemLine: IModel,
+  hipLine: IModel,
+  innerLine0: IModel,
+  innerLine1: IModel,
+  innerLine2: IModel,
+  kneeLine: IModel,
+}
+
 export class Skirt implements IModel {
-  public models: IModelMap
+  public models: ISkirt
+  public paths: ISkirtLines
 
   constructor (block: ISkirtBlock) {
     const {
@@ -78,14 +95,13 @@ export class Skirt implements IModel {
         k3a,
         k3b,
       ]),
-      lines: {
-        paths: {
-          centerBack: new paths.Line(WP1, h3b),
-          centerFront: new paths.Line(WP0, h0a),
-          waistLine: arc(WP1, origin, WP0),
-          yokeLine: arc(y1, origin, y0),
-        },
-      },
+    }
+
+    this.paths = {
+      centerBack: new paths.Line(WP1, h3b),
+      centerFront: new paths.Line(WP0, h0a),
+      waistLine: arc(WP1, origin, WP0),
+      yokeLine: arc(y1, origin, y0),
     }
   }
 }
