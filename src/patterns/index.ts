@@ -7,6 +7,8 @@ import { BodiceBackShaped } from './bodice-shaped/back'
 import { bodiceBlockShaped } from './bodice-shaped/block'
 import { longDart } from './bodice-shaped/dart'
 import { BodiceFrontShaped } from './bodice-shaped/front'
+import { IPantsMeasurements, pantsBlock } from './pants/block'
+import { Pants } from './pants/pants'
 import { skirtBlock } from './skirt/block'
 import { Skirt } from './skirt/skirt'
 import { ISleeveMeasurements, sleeveBlock } from './sleeve/block'
@@ -25,7 +27,7 @@ export class BlockPatterns implements IModel {
 
   public units = unitType.Centimeter
 
-  constructor (measurements: IBodiceMeasurements & ISleeveMeasurements) {
+  constructor (measurements: IBodiceMeasurements & ISleeveMeasurements & IPantsMeasurements) {
     const block = bodiceBlock(measurements)
     const sleeve = sleeveBlock(measurements)
     const skirt = skirtBlock(measurements)
@@ -46,6 +48,10 @@ export class BlockPatterns implements IModel {
       backShaped,
       front,
       frontShaped,
+      pants: model.move(
+        model.layer(new Pants(pantsBlock(measurements)), 'teal'),
+        [-(measurements.H * 3 / 4), 0],
+      ),
       scale: model.layer(new Scale([block.points.UP[0], -11]), 'black'),
       skirt: model.move(
         model.layer(new Skirt(skirt), 'aqua'),
