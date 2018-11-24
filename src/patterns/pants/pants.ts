@@ -169,7 +169,7 @@ export class Pants implements IModel {
       ]),
       waistline: smoothCurve([
         {
-          angleInDegrees: angle.ofPointInDegrees(Z, S) * 2,
+          angleInDegrees: angle.ofPointInDegrees(Z, sideDart.bisector),
           distance,
           origin: Z,
         },
