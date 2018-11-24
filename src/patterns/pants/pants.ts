@@ -1,6 +1,13 @@
-import { angle, IModel, IModelMap, measure, models, paths, point } from 'makerjs'
+import { angle, IModel, IModelMap, IPath, IPathMap, measure, models, paths, point } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
 import { IPantsBlock } from './block'
+
+export interface IPantsLines extends IPathMap {
+  creaseLineFront: IPath,
+  creaseLineBack: IPath,
+  kneeLineFront: IPath,
+  kneeLineBack: IPath,
+}
 
 export interface IPants extends IModelMap {
   waistline: IModel,
@@ -10,6 +17,7 @@ export interface IPants extends IModelMap {
 
 export class Pants implements IModel {
   public models: IPants
+  public paths: IPantsLines
 
   constructor (block: IPantsBlock) {
     const {
@@ -30,6 +38,8 @@ export class Pants implements IModel {
       k0b,
       k1a,
       k1b,
+      m,
+      n,
     } = block.points
 
     const distance = measure.pointDistance(X, Y) / 6
@@ -72,6 +82,13 @@ export class Pants implements IModel {
           origin: O,
         },
       ]),
+    }
+
+    this.paths = {
+      creaseLineBack: new paths.Line(n, point.average(h1a, h1b)),
+      creaseLineFront: new paths.Line(m, point.average(h0a, h0b)),
+      kneeLineBack: new paths.Line(k1a, k1b),
+      kneeLineFront: new paths.Line(k0a, k0b),
     }
   }
 }
