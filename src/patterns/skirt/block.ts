@@ -84,7 +84,7 @@ export function skirtBlock (
 
   const distanceK = lineH - lineK
   const spreadDistance = measurements.H / 60
-  const innerAngle = 2 * Math.sin(spreadDistance / 2 / distanceK)
+  const innerAngle = 2 * Math.asin(spreadDistance / 2 / distanceK)
 
   const a0 = Math.PI
   const a1 = a0 - innerAngle
