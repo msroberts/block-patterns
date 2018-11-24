@@ -12,6 +12,7 @@ export interface IPantsLines extends IPathMap {
   sideLine: IPath,
   innerFrontSeam: IPath,
   innerBackSeam: IPath,
+  lowerWaistline: IPath,
 }
 
 export interface IPants extends IModelMap {
@@ -83,6 +84,7 @@ export class Pants implements IModel {
       ]),
       dots: dots([
         HP,
+        HP1,
         X,
         Y,
         lineYback,
@@ -133,9 +135,14 @@ export class Pants implements IModel {
       sideDart: dartOutline(sideDart),
       upperSeamBack: smoothCurve([
         {
-          angleInDegrees: angle.ofPointInDegrees(Z, HP1),
-          distance: distance * 2,
+          angleInDegrees: 0,
+          distance: 0,
           origin: Z,
+        },
+        {
+          angleInDegrees: angle.ofPointInDegrees(lineYback, Y),
+          distance: distance * 3 / 2,
+          origin: lineYback,
         },
         {
           angleInDegrees: 180,
@@ -145,13 +152,18 @@ export class Pants implements IModel {
       ]),
       upperSeamFront: smoothCurve([
         {
-          angleInDegrees: 270,
-          distance,
+          angleInDegrees: 0,
+          distance: 0,
           origin: O,
         },
         {
+          angleInDegrees: angle.ofPointInDegrees(O, lineYfront),
+          distance: distance / 2,
+          origin: lineYfront,
+        },
+        {
           angleInDegrees: angle.ofPointInDegrees(S, F),
-          distance,
+          distance: distance / 2,
           origin: F,
         },
       ]),
@@ -184,6 +196,7 @@ export class Pants implements IModel {
       innerFrontSeam: new paths.Line(innerPointO, lineYfront),
       kneeLineBack: new paths.Line(k1a, k1b),
       kneeLineFront: new paths.Line(k0a, k0b),
+      lowerWaistline: new paths.Line(innerPointO, sideDart.bisector),
       sideLine: new paths.Line(S, HP),
     }
   }
