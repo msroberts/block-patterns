@@ -7,12 +7,17 @@ export interface IPantsLines extends IPathMap {
   creaseLineBack: IPath,
   kneeLineFront: IPath,
   kneeLineBack: IPath,
+  sideLine: IPath,
 }
 
 export interface IPants extends IModelMap {
   waistline: IModel,
   baseline: IModel,
   lowerOutline: IModel,
+  upperSeamFront: IModel,
+  upperSeamBack: IModel,
+  lowerSeamFront: IModel,
+  lowerSeamBack: IModel,
 }
 
 export class Pants implements IModel {
@@ -30,6 +35,7 @@ export class Pants implements IModel {
       S1,
       Z,
       HP,
+      HP1,
       h0a,
       h0b,
       h1a,
@@ -62,6 +68,54 @@ export class Pants implements IModel {
         h1b,
         k1b,
       ]),
+      lowerSeamBack: smoothCurve([
+        {
+          angleInDegrees: angle.ofPointInDegrees(B, point.average(k1a, k1b)),
+          distance,
+          origin: B,
+        },
+        {
+          angleInDegrees: angle.ofPointInDegrees(k1b, h1b),
+          distance,
+          origin: k1b,
+        },
+      ]),
+      lowerSeamFront: smoothCurve([
+        {
+          angleInDegrees: angle.ofPointInDegrees(F, point.average(k0a, k0b)),
+          distance,
+          origin: F,
+        },
+        {
+          angleInDegrees: angle.ofPointInDegrees(k0a, h0a),
+          distance,
+          origin: k0a,
+        },
+      ]),
+      upperSeamBack: smoothCurve([
+        {
+          angleInDegrees: angle.ofPointInDegrees(Z, HP1),
+          distance: distance * 2,
+          origin: Z,
+        },
+        {
+          angleInDegrees: 180,
+          distance,
+          origin: B,
+        },
+      ]),
+      upperSeamFront: smoothCurve([
+        {
+          angleInDegrees: 270,
+          distance,
+          origin: O,
+        },
+        {
+          angleInDegrees: angle.ofPointInDegrees(S, F),
+          distance,
+          origin: F,
+        },
+      ]),
       waistline: smoothCurve([
         {
           angleInDegrees: angle.ofPointInDegrees(Z, S) * 2,
@@ -89,6 +143,7 @@ export class Pants implements IModel {
       creaseLineFront: new paths.Line(m, point.average(h0a, h0b)),
       kneeLineBack: new paths.Line(k1a, k1b),
       kneeLineFront: new paths.Line(k0a, k0b),
+      sideLine: new paths.Line(S, HP),
     }
   }
 }
