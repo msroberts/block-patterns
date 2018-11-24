@@ -24,6 +24,7 @@ export interface IPantsBlock extends IBlock {
     F: IPoint,
     B: IPoint,
     S: IPoint,
+    S1: IPoint,
     HP: IPoint,
     HP1: IPoint,
     m: IPoint,
@@ -58,6 +59,7 @@ export function pantsBlock (
   const r = rotateFn(HP, angle.toDegrees(Math.asin(1.5 / (HP[0] - Y[0]) * -2)))
   Z = r(Z)
   const HP1 = r([Y[0], HP[1]])
+  const S1 = r(S)
 
   const F = point.add(X, [Math.max(measurements.H / 10 - 5, 4), 0])
   const B = point.add(F, [-(measurements.H * 3 / 4 - fitAmount), -1.5])
@@ -91,6 +93,7 @@ export function pantsBlock (
       HP1,
       O,
       S,
+      S1,
       X,
       Y,
       Z,

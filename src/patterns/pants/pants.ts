@@ -1,4 +1,5 @@
-import { IModel, IModelMap, models } from 'makerjs'
+import { angle, IModel, IModelMap, measure, models, paths, point } from 'makerjs'
+import { smoothCurve } from '../../helpers/curve'
 import { IPantsBlock } from './block'
 
 export interface IPants extends IModelMap {
@@ -18,6 +19,7 @@ export class Pants implements IModel {
       B,
       O,
       S,
+      S1,
       Z,
       HP,
       h0a,
@@ -29,6 +31,8 @@ export class Pants implements IModel {
       k1a,
       k1b,
     } = block.points
+
+    const distance = measure.pointDistance(X, Y) / 6
 
     this.models = {
       baseline: new models.ConnectTheDots(false, [
@@ -48,10 +52,25 @@ export class Pants implements IModel {
         h1b,
         k1b,
       ]),
-      waistline: new models.ConnectTheDots(false, [
-        O,
-        S,
-        Z,
+      waistline: smoothCurve([
+        {
+          angleInDegrees: angle.ofPointInDegrees(Z, S) * 2,
+          distance,
+          origin: Z,
+        },
+        {
+          angleInDegrees: angle.ofPointInDegrees(Z, O),
+          distance,
+          origin: point.average(S, point.fromSlopeIntersection(
+            new paths.Line(S, O),
+            new paths.Line(S1, Z),
+          )),
+        },
+        {
+          angleInDegrees: 0,
+          distance,
+          origin: O,
+        },
       ]),
     }
   }
