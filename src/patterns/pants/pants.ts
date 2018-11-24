@@ -1,5 +1,7 @@
 import { angle, IModel, IModelMap, IPath, IPathMap, measure, models, paths, point } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
+import { dartOutline } from '../../helpers/dart'
+import { dots } from '../../helpers/dots'
 import { IPantsBlock } from './block'
 
 export interface IPantsLines extends IPathMap {
@@ -8,6 +10,8 @@ export interface IPantsLines extends IPathMap {
   kneeLineFront: IPath,
   kneeLineBack: IPath,
   sideLine: IPath,
+  innerFrontSeam: IPath,
+  innerBackSeam: IPath,
 }
 
 export interface IPants extends IModelMap {
@@ -18,6 +22,12 @@ export interface IPants extends IModelMap {
   upperSeamBack: IModel,
   lowerSeamFront: IModel,
   lowerSeamBack: IModel,
+  sideDart: IModel,
+  frontDart: IModel,
+  frontDartSide: IModel,
+  backDart: IModel,
+  backDartSide: IModel,
+  dots: IModel,
 }
 
 export class Pants implements IModel {
@@ -40,23 +50,51 @@ export class Pants implements IModel {
       h0b,
       h1a,
       h1b,
+      innerPointO,
+      innerPointZ,
       k0a,
       k0b,
       k1a,
       k1b,
+      lineYback,
+      lineYfront,
       m,
       n,
     } = block.points
 
+    const {
+      frontDart,
+      frontDartSide,
+      backDart,
+      backDartSide,
+      sideDart,
+    } = block.darts
+
     const distance = measure.pointDistance(X, Y) / 6
 
     this.models = {
+      backDart: dartOutline(backDart),
+      backDartSide: dartOutline(backDartSide),
       baseline: new models.ConnectTheDots(false, [
         F,
         X,
         Y,
         B,
       ]),
+      dots: dots([
+        HP,
+        X,
+        Y,
+        lineYback,
+        lineYfront,
+        frontDart.bisector,
+        frontDartSide.bisector,
+        sideDart.bisector,
+        backDart.bisector,
+        backDartSide.bisector,
+      ]),
+      frontDart: dartOutline(frontDart),
+      frontDartSide: dartOutline(frontDartSide),
       lowerOutline: new models.ConnectTheDots(false,[
         k0a,
         h0a,
@@ -92,6 +130,7 @@ export class Pants implements IModel {
           origin: k0a,
         },
       ]),
+      sideDart: dartOutline(sideDart),
       upperSeamBack: smoothCurve([
         {
           angleInDegrees: angle.ofPointInDegrees(Z, HP1),
@@ -141,6 +180,8 @@ export class Pants implements IModel {
     this.paths = {
       creaseLineBack: new paths.Line(n, point.average(h1a, h1b)),
       creaseLineFront: new paths.Line(m, point.average(h0a, h0b)),
+      innerBackSeam: new paths.Line(innerPointZ, lineYback),
+      innerFrontSeam: new paths.Line(innerPointO, lineYfront),
       kneeLineBack: new paths.Line(k1a, k1b),
       kneeLineFront: new paths.Line(k0a, k0b),
       sideLine: new paths.Line(S, HP),

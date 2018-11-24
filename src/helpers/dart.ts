@@ -1,4 +1,4 @@
-import { angle, IPoint, measure, paths, point } from 'makerjs'
+import { angle, IModel, IPoint, measure, models, paths, point } from 'makerjs'
 import { pointAtDistance } from './point-angles'
 
 export interface IDart {
@@ -72,4 +72,12 @@ export function dart (
     bisector: pointAtDistance(base, bisectorLine.end, bisectorLength),
     ...newDart,
   }
+}
+
+export function dartOutline (d: IDart): IModel {
+  return new models.ConnectTheDots(false, [
+    d.point0,
+    d.base,
+    d.point1,
+  ])
 }

@@ -1,5 +1,6 @@
-import { angle, IPoint, point } from 'makerjs'
-import { rotateFn } from '../../helpers/point-angles'
+import { angle, IPoint, measure, paths, point } from 'makerjs'
+import { IAdjustedDart } from '../../helpers/dart'
+import { pointAtAngle, pointAtDistance, rotateFn } from '../../helpers/point-angles'
 import { IBlock } from '../../types/block'
 import { IMeasurements } from '../../types/measurements'
 
@@ -12,21 +13,37 @@ export interface IPantsMeasurements extends IMeasurements {
 }
 
 export interface IPantsBlock extends IBlock {
+  x: {
+    WR: number,
+  },
   y: {
     bottomLine: number,
     kneeLine: number,
+    dartDepth: number,
+  },
+  darts: {
+    sideDart: IAdjustedDart,
+    frontDart: IAdjustedDart,
+    frontDartSide: IAdjustedDart,
+    backDart: IAdjustedDart,
+    backDartSide: IAdjustedDart,
   },
   points: {
     O: IPoint,
+    innerPointO: IPoint,
     X: IPoint,
     Y: IPoint,
     Z: IPoint,
+    innerPointZ: IPoint,
     F: IPoint,
     B: IPoint,
     S: IPoint,
     S1: IPoint,
     HP: IPoint,
     HP1: IPoint,
+    lineY: IPoint,
+    lineYfront: IPoint,
+    lineYback: IPoint,
     m: IPoint,
     n: IPoint,
     k0a: IPoint,
@@ -45,6 +62,7 @@ export function pantsBlock (
   additionalWidth: number = 6,
   fitAmount: number = 4,
   kneeWidth: number = 8,
+  additionalWaist: number = 2,
 ): IPantsBlock {
   const width = (measurements.H + additionalWidth) / 2
   const bottomLine = -measurements.SideLength
@@ -81,10 +99,63 @@ export function pantsBlock (
   const h1a: IPoint = [k1a[0], bottomLine]
   const h1b: IPoint = [k1b[0], bottomLine]
 
+  const dartDepth = Math.min((O[1] - HP[1]) * 2 / 3, 15)
+  const lineY = pointAtDistance(S, HP, dartDepth)
+  const lineYfront = pointAtDistance(O, X, dartDepth)
+  const lineYback = pointAtDistance(Z, Y, dartDepth)
+
+  const waist = (measurements.W + additionalWaist) / 2
+  const WR = measure.pointDistance(Z, S) + measure.pointDistance(S, O) - waist
+
+  const dartDistance = waist / 6
+  const innerPointO = point.add(O, [-1, -1])
+  const frontDartBisector = pointAtDistance(innerPointO, S, dartDistance + 1)
+  const frontDartSideBisector = pointAtDistance(frontDartBisector, S, dartDistance)
+  const innerPointZ = pointAtDistance(Z, S, 1)
+  const backDartBisector = pointAtDistance(innerPointZ, S, dartDistance + 1)
+  const backDartSideBisector = pointAtDistance(backDartBisector, S, dartDistance)
+
+  const centerAngle = (angle.ofPointInRadians(Z, Y) + angle.ofPointInRadians(O, X)) / 2
+  const sideDartBisector = point.fromSlopeIntersection(
+    new paths.Line(lineY, pointAtAngle(lineY, centerAngle, 1)),
+    new paths.Line(S, innerPointO),
+  )
+  const sideDartWidth = WR - 10
+
   return {
     angles: {
     },
     darts: {
+      backDart: {
+        base: pointAtAngle(backDartBisector, angle.ofPointInRadians(innerPointZ, lineYback), dartDepth),
+        bisector: backDartBisector,
+        point0: pointAtDistance(backDartBisector, innerPointZ, 1),
+        point1: pointAtDistance(backDartBisector, backDartSideBisector, 1),
+      },
+      backDartSide: {
+        base: pointAtAngle(backDartSideBisector, centerAngle, dartDepth * 3 / 4),
+        bisector: backDartSideBisector,
+        point0: pointAtDistance(backDartSideBisector, backDartBisector, 1),
+        point1: pointAtDistance(backDartSideBisector, S, 1),
+      },
+      frontDart: {
+        base: pointAtAngle(frontDartBisector, Math.PI / 2 * 3, dartDepth),
+        bisector: frontDartBisector,
+        point0: pointAtDistance(frontDartBisector, innerPointO, 1),
+        point1: pointAtDistance(frontDartBisector, frontDartSideBisector, 1),
+      },
+      frontDartSide: {
+        base: pointAtAngle(frontDartSideBisector, Math.PI / 2 * 3, dartDepth),
+        bisector: frontDartSideBisector,
+        point0: pointAtDistance(frontDartSideBisector, frontDartBisector, 1),
+        point1: pointAtDistance(frontDartSideBisector, S, 1),
+      },
+      sideDart: {
+        base: lineY,
+        bisector: sideDartBisector,
+        point0: pointAtDistance(sideDartBisector, frontDartSideBisector, sideDartWidth / 2),
+        point1: pointAtDistance(sideDartBisector, backDartSideBisector, sideDartWidth / 2),
+      },
     },
     points: {
       B,
@@ -101,17 +172,24 @@ export function pantsBlock (
       h0b,
       h1a,
       h1b,
+      innerPointO,
+      innerPointZ,
       k0a,
       k0b,
       k1a,
       k1b,
+      lineY,
+      lineYback,
+      lineYfront,
       m,
       n,
     },
     x: {
+      WR,
     },
     y: {
       bottomLine,
+      dartDepth,
       kneeLine,
     },
   }
