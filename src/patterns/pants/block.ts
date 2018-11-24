@@ -109,11 +109,11 @@ export function pantsBlock (
 
   const dartDistance = waist / 6
   const innerPointO = point.add(O, [-1, -1])
-  const frontDartBisector = pointAtDistance(innerPointO, S, dartDistance + 1)
-  const frontDartSideBisector = pointAtDistance(frontDartBisector, S, dartDistance)
+  const frontDartBisector = pointAtDistance(innerPointO, S, dartDistance + 2)
+  const frontDartSideBisector = pointAtDistance(frontDartBisector, S, dartDistance + 2)
   const innerPointZ = pointAtDistance(Z, S, 1)
-  const backDartBisector = pointAtDistance(innerPointZ, S, dartDistance + 1)
-  const backDartSideBisector = pointAtDistance(backDartBisector, S, dartDistance)
+  const backDartBisector = pointAtDistance(innerPointZ, S, dartDistance + 2)
+  const backDartSideBisector = pointAtDistance(backDartBisector, S, dartDistance + 2)
 
   const centerAngle = (angle.ofPointInRadians(Z, Y) + angle.ofPointInRadians(O, X)) / 2
   const sideDartBisector = point.fromSlopeIntersection(
