@@ -13,5 +13,9 @@
   "Wr": 16.5,
   "SideLength": 96,
   "Rise": 29,
-  "KneeWidth": 39
+  "KneeWidth": 39,
+  "hoodHeight": 62,
+  "hoodExtendedHeight": 76,
+  "hoodDepth": 50,
+  "hoodOverhead": 40
 }
