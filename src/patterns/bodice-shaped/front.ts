@@ -1,5 +1,6 @@
 import { IModel, IModelMap, models } from 'makerjs'
 import { smoothCurve } from '../../helpers/curve'
+import { dots } from '../../helpers/dots'
 import { BodiceFront } from '../bodice-block/front'
 import { IBodiceBlockShaped } from './block'
 
@@ -11,6 +12,7 @@ export interface IBodiceFrontShaped extends IModelMap {
   underarm: IModel,
   shoulderDart: IModel,
   waistDart: IModel,
+  dotsShaped: IModel,
 }
 
 export class BodiceFrontShaped implements IModel {
@@ -50,6 +52,9 @@ export class BodiceFrontShaped implements IModel {
         frontWaistDart.bisector,
         frontWaistDart.point1,
         WPf,
+      ]),
+      dotsShaped: dots([
+        [centerFront, lineC],
       ]),
       underarm: smoothCurve([
         {
