@@ -49,17 +49,17 @@ export class Sleeve implements IModel {
           origin: U,
         },
         {
-          angleInDegrees: 45,
+          angleInDegrees: 52.5,
           distance,
           origin: B,
         },
         {
           angleInDegrees: 0,
-          distance,
+          distance: distance * 7 / 6,
           origin: T,
         },
         {
-          angleInDegrees: -60,
+          angleInDegrees: -67.5,
           distance,
           origin: F,
         },
